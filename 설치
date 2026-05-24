@@ -1,0 +1,5 @@
+python -m pip install pygame      #pygame 설치                             4
+
+Ctrl + Shift + P                  #vs -> python 3.11.9 버젼 선택          2
+Python: Select Interpreter        # 검색후 파이썬 버젼 선택                3 
+Extensions(화면 왼쪽 도구메뉴에 네모4개) 검색    : Microsoft Python 선택   1
