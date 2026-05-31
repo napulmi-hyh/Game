@@ -7,6 +7,7 @@ pygame.display.set_caption("rain")
 screen = pygame.display.set_mode((1000,600))
 clock = pygame.time.Clock()
 raindrop_spawn_time = 0
+mike_umbrella_image = pygame.image.load(r"C:\Users\nana6\Desktop\pythonfiles\images\Mike_umbrella.png").convert()  #이미지 그래픽카드가 읽을수있는 포멧으로
 
 # 클래스 : 객체 제어
 
@@ -24,10 +25,17 @@ class Raindrop:
     def off_screen(self):                                # 빗방울 지우기            
         return self.y > 800
 
+class Mike:
+    def __init__(self):
+        self.x = 300
+        self.y = 400
+    def draw(self):
+        screen.blit(mike_umbrella_image,(self.x, self.y))
+
 # 리스트 : 객체 움직임들을 기록
 
 raindrops = []
-
+mike = Mike()
 # 게임루프 : 실제 게임 실행
 """
 for루프 빗방울 삭제시 오류발생-리스트 항목을 하나하나 확인
@@ -44,11 +52,15 @@ while 1:
 
     raindrops.append(Raindrop())
     screen.fill((255,255,255))
-
+    mike.draw()
     i = 0
     while i < len(raindrops):
         raindrops[i].move()
         raindrops[i].draw()
+
+        if raindrops[i].off_screen():         
+            del raindrops[i]
+            i -= 1
         i += 1
     
     pygame.display.update()
