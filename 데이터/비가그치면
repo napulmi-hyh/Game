@@ -1,0 +1,89 @@
+import sys, pygame, random, time
+from pygame.locals import *
+pygame.init()
+screen = pygame.display.set_mode((1000, 600))
+clock = pygame.time.Clock()
+pygame.display.set_caption('rain')
+image_umbrella_mike = pygame.image.load(r"C:\Users\nana6\Desktop\pythonfiles\images\Mike_umbrella.png").convert()
+image_cloud = pygame.image.load(r"C:\Users\nana6\desktop\pythonfiles\images\cloud.png").convert()
+image_mike = pygame.image.load(r"C:\Users\nana6\Desktop\pythonfiles\images\Mike.png").convert()
+last_hit_time = 0      # 마지막 비 맞는 시간
+
+
+class Raindrop:
+    def __init__(self, x, y):
+        self.y = y
+        self.x = x
+        self.speed = random.randint(5,18)
+    def move(self):
+        self.y += self.speed
+    def draw(self):
+        pygame.draw.line(screen, (0,0,0), (self.x, self.y), (self.x, self.y+5), 1)
+    def off_screen(self):
+        return self.y > 800
+    
+class Mike:
+    def __init__(self):
+        self.x = 400
+        self.y = 300
+    def draw(self):
+        if time.time() > last_hit_time + 1:
+            screen.blit(image_mike, (self.x, self.y))
+        else:
+            screen.blit(image_umbrella_mike, (self.x, self.y))
+
+        
+    def hit_by(self, raindrops):
+        return pygame.Rect(self.x, self.y, 170, 192).collidepoint(raindrops.x, raindrops.y)
+    
+
+class Cloud:
+    def __init__(self):
+        self.x = 300
+        self.y = 50
+    def draw(self):
+        screen.blit(image_cloud, (self.x, self.y))
+    def rain(self):            # 비가 10배 많아짐
+        for i in range(10):
+            raindrops.append(Raindrop(random.randint(self.x, self.x + 300), self.y+100))
+    def move(self):
+        if pressed_keys[K_RIGHT]:
+            self.x +=1
+        if pressed_keys[K_LEFT]:
+            self.x -= 1
+
+
+raindrops = []
+mike = Mike()
+cloud = Cloud()
+
+while 1:
+    clock.tick(60)
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            sys.exit()
+    pressed_keys = pygame.key.get_pressed()
+  
+    screen.fill((255,255,255))
+    cloud.draw()
+    cloud.rain()
+    mike.draw()
+    cloud.move()
+    i = 0
+    while i < len(raindrops):
+        raindrops[i].draw()
+        raindrops[i].move()
+        flag = False
+        if raindrops[i].off_screen():
+            flag = True
+        if mike.hit_by(raindrops[i]):
+            last_hit_time = time.time()
+            flag = True
+        if flag:
+            del raindrops[i]
+            i -= 1
+        i += 1
+    pygame.display.update()
+
+
+    
