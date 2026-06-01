@@ -1,0 +1,30 @@
+import pygame, sys, random
+from pygame.locals import *
+pygame.init()
+screen = pygame.display.set_mode((640, 650))
+pygame.display.set_caption('Space Invaders')
+clock = pygame.time.Clock()
+
+badguy_image = pygame.image.load(r"C:\Users\nana6\Desktop\pythonfiles\images\badguy.png").convert()
+
+class Badguy:
+    def __init__(self):
+        self.x = random.randint(0, 570)
+        self.y = -100
+    def move(self):
+        self.y += 5
+    def draw(self):
+        screen.blit(badguy_image,(self.x,self.y))
+
+badguy = Badguy()
+
+while 1:
+    clock.tick(60)
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            sys.exit()
+    screen.fill((0,0,0))
+
+    badguy.draw()
+    badguy.move()
+    pygame.display.update()
